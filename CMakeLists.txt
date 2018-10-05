@@ -52,6 +52,8 @@ else()
 	endif()
 endif()
 
+target_link_libraries(sqlite3 ${CMAKE_DL_LIBS})
+
 install(TARGETS sqlite3
 	RUNTIME DESTINATION bin
 	LIBRARY DESTINATION lib
