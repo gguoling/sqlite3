@@ -28,6 +28,9 @@ option(ENABLE_STATIC "Build static library (default is shared library)." OFF)
 
 
 set(SOURCE_FILES sqlite3.c)
+if(WIN32)
+	list(APPEND SOURCE_FILES sqlite3.def)
+endif()
 
 if(CMAKE_SYSTEM_NAME STREQUAL "WindowsPhone" OR CMAKE_SYSTEM_NAME STREQUAL "WindowsStore")
 	add_definitions(
@@ -42,7 +45,6 @@ if(ENABLE_STATIC)
 else()
 	add_library(sqlite3 SHARED ${SOURCE_FILES})
 	if(MSVC)
-		add_definitions("-DSQLITE_API=__declspec(dllexport)")
 		if(CMAKE_BUILD_TYPE STREQUAL "Debug")
 			install(FILES ${CMAKE_CURRENT_BINARY_DIR}/Debug/sqlite3.pdb
 				DESTINATION bin
@@ -51,8 +53,6 @@ else()
 		endif()
 	endif()
 endif()
-
-target_link_libraries(sqlite3 ${CMAKE_DL_LIBS})
 
 install(TARGETS sqlite3
 	RUNTIME DESTINATION bin
